@@ -39,15 +39,15 @@ const PATTERNS = {
                     If the building is placed right, the building and its gardens
                     will be happy places full of activity and laughter.
                     If it is done wrong, then all the attention in the world,
-                    and the most beautiful details, will not prevent it from 
+                    and the most beautiful details, will not prevent it from
                     being a silent gloomy place.
-                    Thousands of acres of open space in every city are wasted 
+                    Thousands of acres of open space in every city are wasted
                     because they are north of buildings and never get the sun.
                     `,
             solution:   `
-                        Always place buildings to the north of the outdoor spaces 
+                        Always place buildings to the north of the outdoor spaces
                         that go with them, and keep the outdoor spaces to the south.
-                        Never leave a deep band of shade between the building 
+                        Never leave a deep band of shade between the building
                         and the sunny part of the outdoors.
                         `,
             larger_patterns: {
@@ -77,51 +77,50 @@ const PATTERNS = {
 }
 
 
-function Pattern({ pattern }){
-
+function Pattern({ pattern, show_context = true }){
+    PATTERNS[169] = {title: 'asd'}
     return (
         <div>
-            <h1>{pattern} {PATTERNS[pattern].title}</h1>
+
+            {show_context && 'larger_patterns' in PATTERNS[pattern] &&
+            <div style={{display:'flex', backgroundColor: 'DarkSeaGreen'}}>
+              {Object.entries(PATTERNS[pattern].larger_patterns).map(
+                ([k, v]) =>
+                  <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
+                    <Pattern pattern={k} show_context={false} />
+                  </div>
+                )
+              }
+            </div> || <span>nada</span>
+            }
+            <h2 style={{textAlign: 'center'}}><a href={pattern}>{pattern}</a></h2>
+            <h1 style={{textAlign: 'center'}}>{PATTERNS[pattern].title}</h1>
+
             <hr/>
-            {'larger_patterns' in PATTERNS[pattern]
-                            &&
-            <ul style={{fontFamily: 'monospace'}}>
-                    {Object.entries(PATTERNS[pattern].larger_patterns).map(
-                            ([k, v]) => <li key={k}><a href={k}><b>{k}</b> {PATTERNS[k].title} </a>: {v}</li>)}
-            </ul>
-                            ||
-                            <span>nada</span>
+            {'essence' in PATTERNS[pattern] &&
+            <h2 style={{textAlign: 'center'}}><i>{PATTERNS[pattern].essence}</i></h2>
+                            || <span>nada</span>
             }
             <hr/>
-            {'essence' in PATTERNS[pattern]
-                            &&
-            <h2><center><b>{PATTERNS[pattern].essence}</b></center></h2>
-                            ||
-                            <span>nada</span>
+            {'body' in PATTERNS[pattern] &&
+            <div>{PATTERNS[pattern].body}</div> || <span>nada</span>
             }
             <hr/>
-            {'body' in PATTERNS[pattern]
-                            &&
-            <div>{PATTERNS[pattern].body}</div>
-                            ||
-                            <span>nada</span>
+            {'solution' in PATTERNS[pattern] &&
+            <h2 style={{textAlign: 'center'}}><i>{PATTERNS[pattern].solution}</i></h2>
+                            || <span>nada</span>
             }
             <hr/>
-            {'solution' in PATTERNS[pattern]
-                            &&
-            <h2><center><b>{PATTERNS[pattern].solution}</b></center></h2>
-                            ||
-                            <span>nada</span>
-            }
-            <hr/>
-            {'smaller_patterns' in PATTERNS[pattern]
-                            &&
-            <ul style={{fontFamily: 'monospace'}}>
-                    {Object.entries(PATTERNS[pattern].smaller_patterns).map(
-                            ([k, v]) => <li key={k}><a href={k}><b>{k}</b> {PATTERNS[k].title} </a>: {v}</li>)}
-            </ul>
-                            ||
-                            <span>nada</span>
+            {show_context && 'smaller_patterns' in PATTERNS[pattern] &&
+            <div style={{display:'flex', backgroundColor: 'LightSeaGreen'}}>
+              {Object.entries(PATTERNS[pattern].smaller_patterns).map(
+                ([k, v]) =>
+                  <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
+                    <Pattern pattern={k} show_context={false} />
+                  </div>
+                )
+              }
+            </div> || <span>nada</span>
             }
         </div>
     )
@@ -132,50 +131,54 @@ function App() {
 
   const pattern = parseInt(window.location.pathname.slice(1)) || 104
   return (
-    <div style={{display:'flex'}}>
-            <div style={{flex:'25%', borderRight: '3px solid blue'}}>
+    pattern in PATTERNS
+    &&
+    <Pattern pattern={pattern} />
+    ||
+    <span>pattern {pattern} not found</span>
+  )
+}
+
+function Help() {
+  return (
+    <div style={{flex:'25%', borderRight: '3px solid blue'}}>
+<h3>
+      The elements of this language are entities called patterns.
+      Each pattern describes a problem which occurs over and over
+      again in our environment, and then describes the core of
+      the solution to that problem, in such a way that you
+      can use this solution a million times over,
+      without ever doing it the same way twice.
+</h3>
+<h3>
+      each pattern has an introductory paragraph,
+      which sets the context for the pattern,
+      by explaining how it helps to complete certain larger patterns
+</h3>
+<h3>This headline gives the essence of the problem in one or two sentences.</h3>
+<h3>
+      After the headline comes the body of the problem.
+      This is the longest section. It describes the empirical background of the pattern,
+      the evidence for its validity, the range of different ways
+      the pattern can be manifested in a building, and so on.
+</h3>
+<h3>
+      Then is the solution—the heart of the pattern—which describes
+      the field of physical and social relationships which are required
+      to solve the stated problem, in the stated context.
+      This solution is always stated in the form of an instruction
+      —so that you know exactly what you need to do, to build the pattern.
+</h3>
+<div>
       <h3>
-              The elements of this language are entities called patterns.
-              Each pattern describes a problem which occurs over and over
-              again in our environment, and then describes the core of 
-              the solution to that problem, in such a way that you 
-              can use this solution a million times over,
-              without ever doing it the same way twice.
+              And finally, after the diamonds there is a paragraph
+              which ties the pattern to all those smaller patterns
+              in the language, which are needed to complete this pattern,
+              to embellish it, to fill it out.
       </h3>
-      <h3>
-              each pattern has an introductory paragraph,
-              which sets the context for the pattern,
-              by explaining how it helps to complete certain larger patterns
-      </h3>
-      <h3>This headline gives the essence of the problem in one or two sentences.</h3>
-      <h3>
-              After the headline comes the body of the problem.
-              This is the longest section. It describes the empirical background of the pattern,
-              the evidence for its validity, the range of different ways 
-              the pattern can be manifested in a building, and so on.
-      </h3>
-      <h3>
-              Then is the solution—the heart of the pattern—which describes 
-              the field of physical and social relationships which are required 
-              to solve the stated problem, in the stated context. 
-              This solution is always stated in the form of an instruction
-              —so that you know exactly what you need to do, to build the pattern.
-      </h3>
-      <div>
-              <h3>
-                      And finally, after the diamonds there is a paragraph
-                      which ties the pattern to all those smaller patterns
-                      in the language, which are needed to complete this pattern,
-                      to embellish it, to fill it out.
-              </h3>
-      </div>
-      </div>
-      <div style={{flex:'75%'}}>
-              {pattern in PATTERNS && <Pattern pattern={pattern} /> || <span>pattern {pattern} not found</span>}
-      </div>
-      <hr/>
-    </div>
-  );
+</div>
+</div>
+  )
 }
 
 export default App;
