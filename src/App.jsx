@@ -103,25 +103,24 @@ function Pattern({ pattern }){
     )
 }
 
-function App() {
-
-  const pattern = parseInt(window.location.pathname.slice(1)) || 104
+function TripleView({ pattern }) {
+  // console.log('TripleView ' + pattern)
   return (
-    pattern in PATTERNS
-    &&
     <div style={{display: 'flex'}}>
 
       <div style={{flex: 1, backgroundColor: 'DarkSeaGreen'}}>
         <h1 style={{textAlign: 'center'}}>Larger patterns</h1>
         <hr />
+
         {'larger_patterns' in PATTERNS[pattern] &&
           // <div style={{display:'flex'}}>
           Object.entries(PATTERNS[pattern].larger_patterns).map(
             ([k, v]) =>
-              <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
-                <Pattern pattern={k} />
-                </div>
-              )
+              <div key={k} style={{display: 'flex'}}>
+                <div style={{flex: 1}}><Pattern pattern={k} /></div>
+                <div style={{flex: 1}}>{v}</div>
+              </div>
+            )
         }
       </div>
 
@@ -132,18 +131,37 @@ function App() {
       <div style={{flex: 1, backgroundColor: 'LightSeaGreen'}}>
         <h1 style={{textAlign: 'center'}}>Smaller patterns</h1>
         <hr />
+
         {'smaller_patterns' in PATTERNS[pattern] &&
-        //display:'flex', flexDirection: 'row',
+          //display:'flex', flexDirection: 'row',
           Object.entries(PATTERNS[pattern].smaller_patterns).map(
             ([k, v]) =>
-              <div key={k}><Pattern pattern={k} /></div>
-          )
-      }
+            <div key={k} style={{display: 'flex'}}>
+              <div style={{flex: 1}}>{v}</div>
+              <div style={{flex: 1}}><Pattern pattern={k} /></div>
+            </div>
+            )
+        }
       </div>
+
     </div>
-    ||
-    <span>pattern {pattern} not found</span>
   )
+}
+
+function App() {
+
+  const pattern = parseInt(window.location.pathname.slice(1)) || 104
+  console.log(pattern)
+  if (pattern in PATTERNS) {
+    return <TripleView pattern={pattern} />
+  } else {
+    return (
+      <div style={{textAlign: 'center'}}>
+        <h1>Pattern {pattern} not found.</h1>
+        <div>Try <a href={104}>104</a></div>
+      </div>
+    )
+  }
 }
 
 function Help() {
