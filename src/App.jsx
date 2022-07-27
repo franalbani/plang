@@ -77,22 +77,10 @@ const PATTERNS = {
 }
 
 
-function Pattern({ pattern, show_context = true }){
-    PATTERNS[169] = {title: 'asd'}
+function Pattern({ pattern }){
+
     return (
         <div>
-
-            {show_context && 'larger_patterns' in PATTERNS[pattern] &&
-            <div style={{display:'flex', backgroundColor: 'DarkSeaGreen'}}>
-              {Object.entries(PATTERNS[pattern].larger_patterns).map(
-                ([k, v]) =>
-                  <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
-                    <Pattern pattern={k} show_context={false} />
-                  </div>
-                )
-              }
-            </div> || <span>nada</span>
-            }
             <h2 style={{textAlign: 'center'}}><a href={pattern}>{pattern}</a></h2>
             <h1 style={{textAlign: 'center'}}>{PATTERNS[pattern].title}</h1>
 
@@ -111,20 +99,8 @@ function Pattern({ pattern, show_context = true }){
                             || <span>nada</span>
             }
             <hr/>
-            {show_context && 'smaller_patterns' in PATTERNS[pattern] &&
-            <div style={{display:'flex', backgroundColor: 'LightSeaGreen'}}>
-              {Object.entries(PATTERNS[pattern].smaller_patterns).map(
-                ([k, v]) =>
-                  <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
-                    <Pattern pattern={k} show_context={false} />
-                  </div>
-                )
-              }
-            </div> || <span>nada</span>
-            }
         </div>
     )
-
 }
 
 function App() {
@@ -133,7 +109,38 @@ function App() {
   return (
     pattern in PATTERNS
     &&
-    <Pattern pattern={pattern} />
+    <div style={{display: 'flex'}}>
+
+      <div style={{flex: 1, backgroundColor: 'DarkSeaGreen'}}>
+        <h1 style={{textAlign: 'center'}}>Larger patterns</h1>
+        <hr />
+        {'larger_patterns' in PATTERNS[pattern] &&
+          // <div style={{display:'flex'}}>
+          Object.entries(PATTERNS[pattern].larger_patterns).map(
+            ([k, v]) =>
+              <div key={k} style={{flex:1, borderRight: '3px solid blue'}}>
+                <Pattern pattern={k} />
+                </div>
+              )
+        }
+      </div>
+
+      <div style={{flex: 1, backgroundColor: 'Turquoise'}}>
+        <Pattern pattern={pattern} />
+      </div>
+
+      <div style={{flex: 1, backgroundColor: 'LightSeaGreen'}}>
+        <h1 style={{textAlign: 'center'}}>Smaller patterns</h1>
+        <hr />
+        {'smaller_patterns' in PATTERNS[pattern] &&
+        //display:'flex', flexDirection: 'row',
+          Object.entries(PATTERNS[pattern].smaller_patterns).map(
+            ([k, v]) =>
+              <div key={k}><Pattern pattern={k} /></div>
+          )
+      }
+      </div>
+    </div>
     ||
     <span>pattern {pattern} not found</span>
   )
